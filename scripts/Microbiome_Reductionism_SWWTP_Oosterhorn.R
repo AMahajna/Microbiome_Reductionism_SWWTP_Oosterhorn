@@ -236,7 +236,7 @@ for (i in 1:length(alpha_clean)){
     scale_x_continuous(limits = c(-7, 0), breaks = seq(-7,0,1)) +
     scale_y_continuous(limits = c(-1, 1), breaks = seq(-1,1,0.2)) +
     labs(title=text,
-         x ="Lag", y = "Correlation")+
+         x ="Lag", y = "Correlation Coefficient")+
     theme(plot.title = element_text(size = 9))
   plot_list[[i]] <- plot
   #ggplotly(plot)

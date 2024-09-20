@@ -1,95 +1,25 @@
-#readr::local_edition(1)
 ###############################################################################
-# install packages
-
-if( !require("corrplot") ){
-  install.packages("corrplot")
-  library("corrplot")
+# Define a function to install and load packages
+install_and_load <- function(packages) {
+  for (pkg in packages) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      if (pkg %in% c("Biostrings", "miaViz", "mia", "scater")) {
+        BiocManager::install(pkg)
+      } else {
+        install.packages(pkg)
+      }
+    }
+    library(pkg, character.only = TRUE)
+  }
 }
 
-if( !require("plotly") ){
-  install.packages("plotly", type = "source")
-  library("plotly")
-}
+# List of packages to install and load
+packages <- c(
+  "corrplot", "plotly", "ggcorrplot", "BiocManager", "Biostrings", 
+  "GGally", "miaViz", "mia", "scater", "devtools", "tidyverse", 
+  "readxl", "astsa", "readr", "dplyr", "ggplot2", "forecast", 
+  "RColorBrewer", "gridExtra"
+)
 
-if( !require("ggcorrplot") ){
-  install.packages("ggcorrplot")
-  library("ggcorrplot")
-}
-
-if( !require("BiocManager") ){
-  install.packages("BiocManager")
-  library("BiocManager")
-}
-
-if( !require("Biostrings") ){
-  BiocManager::install("Biostrings")
-  library("Biostrings")
-}
-
-if( !require("GGally") ){
-  install.packages("GGally")
-  library("GGally")
-}
-
-if( !require("miaViz") ) {
-  BiocManager::install("miaViz")
-  library("miaViz")
-}
-
-if( !require("mia") ) {
-  BiocManager::install("mia")
-  library("mia")
-}
-
-if( !require("scater") ) {
-  BiocManager::install("scater")
-  library("scater")
-}
-
-if( !require("devtools") ) {
-  install.packages("devtools")
-  library("devtools")
-}
-
-if( !require("tidyverse") ) {
-  install.packages("tidyverse")
-  library("tidyverse")
-}
-
-if( !require("readxl") ) {
-  install.packages("readxl")
-  library("readxl")
-}
-
-if( !require("astsa") ) {
-  install.packages("astsa")
-  library("astsa")
-}
-
-if( !require("readr") ) {
-  install.packages("readr")
-  library("readr")
-}
-
-if( !require("dplyr") ) {
-  install.packages("dplyr")
-  library("dplyr")
-}
-
-if( !require("ggplot2") ) {
-  install.packages("ggplot2")
-  library("ggplot2")
-}
-
-if( !require("forecast") ) {
-  install.packages("forecast")
-  library("forecast")
-}
-
-if( !require("RColorBrewer") ) {
-  install.packages("RColorBrewer")
-  library("RColorBrewer")
-}
-
-
+# Install and load the packages
+install_and_load(packages)

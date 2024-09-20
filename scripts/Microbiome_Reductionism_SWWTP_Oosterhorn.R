@@ -220,12 +220,13 @@ corrplot(total_corr, order ='hclust', hclust.method ='single' ,addrect = 3, rect
          number.digits = 3,number.cex = 0.3,tl.pos ='lt', tl.srt=45, tl.cex = 0.5)
 dev.off()
 
-alpha_clean = alpha[ ,c("gini_simpson", "observed","log_modulo_skewness", "shannon")]
+alpha_clean = alpha[ ,c("observed","log_modulo_skewness","gini_simpson", "shannon")]
 ################################################################################
+plot_list <- list()
 for (i in 1:length(alpha_clean)){ 
   #Add name of the alpha diversity used in CCF
   n=colnames(alpha_clean)
-  text = paste("Cross Correlation Function for", n[i], "\n" , "and Removal Efficiency")
+  text = paste("cross correlation function for", n[i] , "and removal efficiency")
   #CCF
   plot <- ggCcf(alpha_clean[ ,i],
                 RE$Averaged_removal_efficiency,
@@ -235,14 +236,36 @@ for (i in 1:length(alpha_clean)){
     scale_x_continuous(limits = c(-7, 0), breaks = seq(-7,0,1)) +
     scale_y_continuous(limits = c(-1, 1), breaks = seq(-1,1,0.2)) +
     labs(title=text,
-         x ="Lag", y = "Correlation")
+         x ="Lag", y = "Correlation")+
+    theme(plot.title = element_text(size = 9))
+  plot_list[[i]] <- plot
   #ggplotly(plot)
   #Save plot 
   cff_name = paste('figures/','ccf_', n[i],".png")
   png(cff_name ,units = 'in',width=5, height=5, res=1000)
   print(plot)
   dev.off()
+  
 }
 
+
+# Combine all plots into one figure
+combined_plot <- grid.arrange(grobs = plot_list, ncol = 2)  # Adjust ncol for desired layout
+
+# Save the combined plot
+png("figures/combined_ccf_plots.png", units = 'in', width = 10, height = 6, res = 1000)
+print(grid.arrange(grobs = plot_list, ncol = 2))
+dev.off()
+
+
 write.csv(as.data.frame(colData(tse_function)[ , c("Sample_ID","SampleFileName","SRA_accession","Biosample_accession", "gini_simpson")]), "output_data/alpha_diversity.csv", row.names=FALSE)
+
+
+
+
+
+
+
+
+
 

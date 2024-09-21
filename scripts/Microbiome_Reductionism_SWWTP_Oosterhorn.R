@@ -17,6 +17,9 @@ source(file = "scripts/install_load_packages.r")
 #Microbiome Data
 load("input_data/tse_function.RData")
 
+#Number of unique functional genes existing in the 32 samples  
+length(unique(rowData(tse_function)$Order))
+
 #Read Removal Efficiency file 
 RE = read_excel("input_data/Removal_Efficiency.xlsx")
 

@@ -18,8 +18,10 @@ packages <- c(
   "corrplot", "plotly", "ggcorrplot", "BiocManager", "Biostrings", 
   "GGally", "miaViz", "mia", "scater", "devtools", "tidyverse", 
   "readxl", "astsa", "readr", "dplyr", "ggplot2", "forecast", 
-  "RColorBrewer", "gridExtra"
+  "RColorBrewer", "gridExtra", "writexl"
 )
 
 # Install and load the packages
 install_and_load(packages)
+
+

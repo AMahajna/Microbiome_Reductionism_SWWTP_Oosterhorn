@@ -19,6 +19,28 @@ load("input_data/tse_function.RData")
 
 #Number of unique functional genes existing in the 32 samples  
 length(unique(rowData(tse_function)$Order))
+tse_genes <- agglomerateByRank(tse_function, rank ="Order")
+top_genes <- getTopFeatures(tse_genes, top = 10, assay.type = "relabundance")
+# Create an empty data frame to store results
+tax_map_table <- data.frame(Kingdom = character(),
+                         Phylum = character(),
+                         Class = character(),
+                         Order = character(),
+                         stringsAsFactors = FALSE)
+for (i in top_genes){
+  i <- sub("^Order:", "", i)
+  tax_map = mapTaxonomy(tse_genes, taxa = i)
+  tax_map_table  <- rbind(tax_map_table , data.frame(
+  Kingdom = as.data.frame(tax_map)[ ,1],
+  Phylum = as.data.frame(tax_map)[ ,2],
+  Class = as.data.frame(tax_map)[ ,3],
+  Order = as.data.frame(tax_map)[ ,4],
+  stringsAsFactors = FALSE
+    ))
+  }
+
+write_xlsx(tax_map_table, "output_data/taxonomy_top10_genes.xlsx")  
+
 
 #Read Removal Efficiency file 
 RE = read_excel("input_data/Removal_Efficiency.xlsx")

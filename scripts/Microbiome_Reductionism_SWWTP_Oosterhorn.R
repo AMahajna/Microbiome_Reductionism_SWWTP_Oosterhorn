@@ -250,20 +250,20 @@ dev.off()
 alpha_clean = alpha[ ,c("observed","log_modulo_skewness","gini_simpson", "shannon")]
 ################################################################################
 plot_list <- list()
-for (i in 1:length(alpha_clean)){ 
+for (i in 1:length(alpha)){ 
   #Add name of the alpha diversity used in CCF
-  n=colnames(alpha_clean)
-  text = paste("cross correlation function for", n[i] , "and removal efficiency")
+  n=colnames(alpha)
+  text = paste("Cross-correlation function for", n[i] , "and removal efficiency")
   #CCF
-  plot <- ggCcf(alpha_clean[ ,i],
+  plot <- ggCcf(alpha[ ,i],
                 RE$Averaged_removal_efficiency,
                 type = "correlation",
                 na.action = na.contiguous) +
     theme_minimal() + 
-    scale_x_continuous(limits = c(-7, 0), breaks = seq(-7,0,1)) +
-    scale_y_continuous(limits = c(-1, 1), breaks = seq(-1,1,0.2)) +
-    labs(title=text,
-         x ="Lag", y = "Correlation Coefficient")+
+    scale_x_continuous(limits = c(-4, 0), breaks = seq(-4, 0, 1)) +
+    scale_y_continuous(limits = c(-0.45, 0.45), breaks = seq(-0.45, 0.45, 0.1)) +
+    labs(title = text,
+         x = "Lag", y = "Correlation Coefficient") +
     theme(plot.title = element_text(size = 9))
   plot_list[[i]] <- plot
   #ggplotly(plot)
@@ -272,20 +272,42 @@ for (i in 1:length(alpha_clean)){
   png(cff_name ,units = 'in',width=5, height=5, res=1000)
   print(plot)
   dev.off()
-  
+}
+
+# Combine all plots into one figure
+#combined_plot <- grid.arrange(grobs = plot_list, ncol = 2)  # Adjust ncol for desired layout
+
+################################################################################
+
+#no title 
+for (i in 1:length(alpha)){ 
+  # CCF
+  plot <- ggCcf(alpha[ ,i],
+                RE$Averaged_removal_efficiency,
+                type = "correlation",
+                na.action = na.contiguous) +
+    theme_minimal() + 
+    scale_x_continuous(limits = c(-4, 0), breaks = seq(-4, 0, 1)) +
+    scale_y_continuous(limits = c(-0.45, 0.45), breaks = seq(-0.45, 0.45, 0.1)) +
+    labs(x = "Lag", y = "Correlation Coefficient")  +  # Set title to NULL
+    theme(plot.title = element_blank())
+  plot_list[[i]] <- plot
 }
 
 
-# Combine all plots into one figure
-combined_plot <- grid.arrange(grobs = plot_list, ncol = 2)  # Adjust ncol for desired layout
+combined_plot <- plot_grid(
+    plotlist = plot_list[c(7,11,13,21)], 
+    labels = c("a", "b", "c", "d","e","f","g"),   # Add labels
+    ncol = 2                          # Specify the number of columns
+)
 
 # Save the combined plot
 png("figures/combined_ccf_plots.png", units = 'in', width = 10, height = 6, res = 1000)
-print(grid.arrange(grobs = plot_list, ncol = 2))
+print(plot_grid(plotlist = plot_list[c(7,11,13,21)], labels = c("a", "b", "c", "d","e","f","g"),ncol = 2))
 dev.off()
 
-
 write.csv(as.data.frame(colData(tse_function)[ , c("Sample_ID","SampleFileName","SRA_accession","Biosample_accession", "gini_simpson")]), "output_data/alpha_diversity.csv", row.names=FALSE)
+################################################################################
 
 
 

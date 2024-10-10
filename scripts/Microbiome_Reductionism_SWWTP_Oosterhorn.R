@@ -116,14 +116,14 @@ suppressMessages({
     
     
     combined_plot <- plot_grid(
-        plotlist = plot_list[c(7,11,13,21)], 
+        plotlist = plot_list[c(7,13,21,9,11,16,20)], 
         labels = c("a", "b", "c", "d","e","f","g"),   # Add labels
         ncol = 2                          # Specify the number of columns
     )
     
     # Save the combined plot
-    png("figures/combined_ccf_plots.png", units = 'in', width = 10, height = 6, res = 1000)
-    print(plot_grid(plotlist = plot_list[c(7,11,13,21)], labels = c("a", "b", "c", "d","e","f","g"),ncol = 2))
+    png("figures/combined_ccf_plots.png", units = 'in', width = 12.5, height = 15, res = 1000)
+    print(plot_grid(plotlist = plot_list[c(7,13,21,9,11,16,20)], labels = c("a", "b", "c", "d","e","f","g"),ncol = 2))
     dev.off()
   })
 })
